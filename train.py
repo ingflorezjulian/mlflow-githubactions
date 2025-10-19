@@ -85,7 +85,7 @@ def train_model():
     try:
         mlflow.create_experiment(
             name=EXPERIMENT_NAME,
-            artifact_location=f"file://{os.path.abspath(mlruns_dir)}"
+            artifact_location=f"file://{(mlruns_dir)}"
         )
     except mlflow.exceptions.MlflowException:
         pass
