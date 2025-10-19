@@ -1,0 +1,11 @@
+artifact_location: file:///Users/julianflorez/Documents/3. EAN - Maestria en Ciencia
+  de Datos/3. MLOps/mlflow-githubactions/mlruns/models/m-c01dd0ffbac14ac8b4c137fb996ad944/artifacts
+creation_timestamp: 1760885550725
+experiment_id: '907940610061012802'
+last_updated_timestamp: 1760885554570
+model_id: m-c01dd0ffbac14ac8b4c137fb996ad944
+model_type: null
+name: model
+source_run_id: 5fe8eaf3ef13486eb6aa48ea122e68c3
+status: 2
+status_message: null

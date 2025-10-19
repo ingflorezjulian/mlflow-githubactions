@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/julianflorez/Documents/3. EAN - Maestria en Ciencia de
+  Datos/3. MLOps/mlflow-githubactions/mlruns/f5ef42dc107b4bff9d8411ee1ec2e6fe/artifacts
+end_time: 1760881271172
+entry_point_name: ''
+experiment_id: '907940610061012802'
+lifecycle_stage: active
+run_id: f5ef42dc107b4bff9d8411ee1ec2e6fe
+run_name: RandomForest-Training
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760881265519
+status: 3
+tags: []
+user_id: julianflorez
