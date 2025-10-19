@@ -1,0 +1,40 @@
+# En la raíz del proyecto, crear el archivo
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+*.pyc
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Modelos
+*.pkl
+*.h5
+*.joblib
+
+# Jupyter
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+EOF
