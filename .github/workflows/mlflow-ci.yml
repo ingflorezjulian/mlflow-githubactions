@@ -1,4 +1,4 @@
-name: MLflow CI/CD Pipeline
+name: CI/CD para ML con MLflow
 
 on:
   push:
@@ -8,39 +8,45 @@ on:
   workflow_dispatch:
 
 jobs:
-  ml-pipeline:
+  ml_pipeline:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 📥 Checkout repositorio
-      uses: actions/checkout@v4
-    
-    - name: 🐍 Configurar Python 3.10
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-        cache: 'pip'
-    
-    - name: 📦 Instalar dependencias
-      run: make install
-    
-    - name: 🚀 Entrenar modelo
-      run: make train
-    
-    - name: 🧪 Validar modelo
-      run: make validate
-    
-    - name: 📊 Subir artefactos MLflow
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: mlflow-artifacts
-        path: mlruns/
-        retention-days: 30
-    
-    - name: ✅ Pipeline completado
-      if: success()
-      run: |
-        echo "═══════════════════════════════════════════"
-        echo "Pipeline de ML ejecutado exitosamente"
-        echo "═══════════════════════════════════════════"
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Entrenar modelo
+        env:
+          MLFLOW_TRACKING_URI: ./mlruns
+          HOME: ${{ github.workspace }}
+        run: python train.py
+
+      - name: Validar desempeño del modelo
+        env:
+          MLFLOW_TRACKING_URI: ./mlruns
+          HOME: ${{ github.workspace }}
+        run: python validate.py
+
+      - name: Subir artefactos de MLflow
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: mlruns/
+          retention-days: 30
+
+      - name: Pipeline completado
+        if: success()
+        run: |
+          echo "Pipeline de ML ejecutado exitosamente"
