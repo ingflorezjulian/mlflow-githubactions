@@ -16,8 +16,8 @@ from sklearn.model_selection import train_test_split
 # Configuración
 EXPERIMENT_NAME = "Heart-Disease-Classification"
 THRESHOLD_ACCURACY = 0.70  # Umbral mínimo
-mlruns_dir = os.path.join(os.getcwd(), "mlruns")
-tracking_uri = f"file://{os.path.abspath(mlruns_dir)}"
+mlruns_dir = "mlruns"
+tracking_uri = "./mlruns"
 
 mlflow.set_tracking_uri(tracking_uri)
 

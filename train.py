@@ -14,8 +14,8 @@ from mlflow.models import infer_signature
 
 # Configuración
 EXPERIMENT_NAME = "Heart-Disease-Classification"
-mlruns_dir = os.path.join(os.getcwd(), "mlruns")
-tracking_uri = f"file://{(mlruns_dir)}"
+mlruns_dir = "mlruns"
+tracking_uri = "./mlruns"
 
 os.makedirs(mlruns_dir, exist_ok=True)
 mlflow.set_tracking_uri(tracking_uri)
@@ -85,7 +85,7 @@ def train_model():
     try:
         mlflow.create_experiment(
             name=EXPERIMENT_NAME,
-            artifact_location=f"file://{(mlruns_dir)}"
+            artifact_location="./mlruns"
         )
     except mlflow.exceptions.MlflowException:
         pass
