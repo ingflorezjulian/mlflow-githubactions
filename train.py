@@ -15,7 +15,7 @@ from mlflow.models import infer_signature
 # Configuración
 EXPERIMENT_NAME = "Heart-Disease-Classification"
 mlruns_dir = os.path.join(os.getcwd(), "mlruns")
-tracking_uri = f"file://{os.path.abspath(mlruns_dir)}"
+tracking_uri = f"file://{(mlruns_dir)}"
 
 os.makedirs(mlruns_dir, exist_ok=True)
 mlflow.set_tracking_uri(tracking_uri)
