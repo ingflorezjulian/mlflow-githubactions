@@ -12,13 +12,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from mlflow.models import infer_signature
 
-# Configuración
+# Configuración 
 EXPERIMENT_NAME = "Heart-Disease-Classification"
-mlruns_dir = "mlruns"
-tracking_uri = "./mlruns"
-
-os.makedirs(mlruns_dir, exist_ok=True)
-mlflow.set_tracking_uri(tracking_uri)
+os.environ['MLFLOW_TRACKING_URI'] = 'file:./mlruns'
+os.makedirs("mlruns", exist_ok=True)
+mlflow.set_tracking_uri("file:./mlruns")
 
 
 def load_data():
@@ -81,14 +79,7 @@ def train_model():
     print("ENTRENAMIENTO DEL MODELO")
     print("=" * 70)
     
-    # Configurar experimento
-    try:
-        mlflow.create_experiment(
-            name=EXPERIMENT_NAME
-        )
-    except mlflow.exceptions.MlflowException:
-        pass
-    
+    # Configurar experimento SIN artifact_location
     mlflow.set_experiment(EXPERIMENT_NAME)
     
     with mlflow.start_run(run_name="RandomForest-Training") as run:
@@ -142,7 +133,7 @@ def train_model():
         for metric_name, metric_value in metrics.items():
             mlflow.log_metric(metric_name, metric_value)
         
-        # 9. IMPORTANTE: Signature e Input Example (REQUISITO DEL TALLER)
+        # 9. Signature e Input
         signature = infer_signature(X_train, model.predict(X_train))
         input_example = X_train.iloc[:5]
         
@@ -151,17 +142,18 @@ def train_model():
             sk_model=model,
             artifact_path="model",
             signature=signature,         
-            input_example=input_example  
+            input_example=input_example,
+            registered_model_name=None  
         )
         
         # 11. Resultados
         print("\n" + "=" * 70)
-        print("📈 RESULTADOS DEL ENTRENAMIENTO")
+        print("RESULTADOS DEL ENTRENAMIENTO")
         print("=" * 70)
         print(f"Run ID: {run.info.run_id}")
         print(f"\nMétricas:")
         for metric_name, metric_value in metrics.items():
-            print(f"  • {metric_name}: {metric_value:.4f}")
+            print(f"  {metric_name}: {metric_value:.4f}")
         print(f"\nModelo guardado en: mlruns/")
         print("=" * 70)
         
@@ -171,10 +163,10 @@ def train_model():
 if __name__ == "__main__":
     try:
         run_id = train_model()
-        print(f"\n Entrenamiento completado exitosamente")
-        print(f"🔑 Run ID: {run_id}\n")
+        print(f"\nEntrenamiento completado exitosamente")
+        print(f"Run ID: {run_id}\n")
     except Exception as e:
-        print(f"\n Error: {e}")
+        print(f"\nError: {e}")
         import traceback
         traceback.print_exc()
         exit(1)
