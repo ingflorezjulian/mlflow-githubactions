@@ -12,12 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from mlflow.models import infer_signature
 
-# Configuración 
+# Configuración SIMPLE
 EXPERIMENT_NAME = "Heart-Disease-Classification"
-os.environ['MLFLOW_TRACKING_URI'] = 'file:./mlruns'
-os.makedirs("mlruns", exist_ok=True)
-mlflow.set_tracking_uri("file:./mlruns")
-
 
 def load_data():
     """
@@ -26,7 +22,6 @@ def load_data():
     """
     print("📂 Cargando dataset externo (UCI Heart Disease)...")
     
-    # URL del dataset de UCI
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
     
     column_names = [
@@ -44,12 +39,12 @@ def load_data():
         
     except Exception as e:
         print(f"Error descargando dataset: {e}")
-        print("💡 Generando dataset sintético...")
+        print("Generando dataset sintético...")
         return create_synthetic_data()
 
 
 def create_synthetic_data():
-    """Dataset sintético como alternativa (sin conexión a internet)"""
+    """Dataset sintético como alternativa"""
     np.random.seed(42)
     n_samples = 300
     
@@ -79,7 +74,6 @@ def train_model():
     print("ENTRENAMIENTO DEL MODELO")
     print("=" * 70)
     
-    # Configurar experimento SIN artifact_location
     mlflow.set_experiment(EXPERIMENT_NAME)
     
     with mlflow.start_run(run_name="RandomForest-Training") as run:
@@ -94,7 +88,7 @@ def train_model():
             X, y, test_size=0.2, random_state=42, stratify=y
         )
         
-        print(f"\n División de datos:")
+        print(f"\nDivision de datos:")
         print(f"   Training: {X_train.shape[0]} muestras")
         print(f"   Testing:  {X_test.shape[0]} muestras")
         
@@ -109,7 +103,7 @@ def train_model():
         }
         
         # 4. Entrenar modelo
-        print(f"\n🔧 Entrenando Random Forest...")
+        print(f"\nEntrenando Random Forest...")
         model = RandomForestClassifier(**params)
         model.fit(X_train, y_train)
         
@@ -133,17 +127,16 @@ def train_model():
         for metric_name, metric_value in metrics.items():
             mlflow.log_metric(metric_name, metric_value)
         
-        # 9. Signature e Input
+        # 9. Signature e Input Example
         signature = infer_signature(X_train, model.predict(X_train))
         input_example = X_train.iloc[:5]
         
-        # 10. Registrar modelo con signature e input_example
+        # 10. Registrar modelo
         mlflow.sklearn.log_model(
             sk_model=model,
             artifact_path="model",
-            signature=signature,         
-            input_example=input_example,
-            registered_model_name=None  
+            signature=signature,
+            input_example=input_example
         )
         
         # 11. Resultados
@@ -151,7 +144,7 @@ def train_model():
         print("RESULTADOS DEL ENTRENAMIENTO")
         print("=" * 70)
         print(f"Run ID: {run.info.run_id}")
-        print(f"\nMétricas:")
+        print(f"\nMetricas:")
         for metric_name, metric_value in metrics.items():
             print(f"  {metric_name}: {metric_value:.4f}")
         print(f"\nModelo guardado en: mlruns/")
